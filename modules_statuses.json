@@ -1,0 +1,16 @@
+{
+    "Settings": true,
+    "Module": true,
+    "Front": true,
+    "Office": true,
+    "Frontoffice": true,
+    "Fee": true,
+    "Hrm": true,
+    "Communication": true,
+    "Transport": true,
+    "Onlineexamination": true,
+    "Onlinecourses": true,
+    "Hostel": true,
+    "Library": true,
+    "Examination": true
+}

@@ -1,0 +1,29 @@
+.idea/
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+public/storage
+Homestead.yaml
+Homestead.json
+#composer.json
+composer.lock
+/bootstrap/cache
+bootstrap/cache/*
+/vendor
+vendor/*
+/vendor/*
+/vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php
+.env
+/.env
+/.htaccess
+/storage
+/storage/*
+storage/*
+public/visitorDoc/*
