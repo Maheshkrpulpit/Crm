@@ -10,23 +10,20 @@ use App\Models\User;
 use App\Models\Master\Package;
 use App\Http\Controllers\Admin\Master\DataTables\SalesDataTable;
 use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Session;
 
 class SalesController extends Controller
 {
     public function index(SalesDataTable $dataTable){
         $userID = auth()->id();
-
-        $roles = DB::table('model_has_roles')
-            ->where('model_id', $userID)
-            ->select('role_id')
-            ->get();
         $brand_data = Brand::where('status',1)->pluck('name','id');
-        // if(($roles['0']->role_id) == 2){
+        if(auth()->user()->getRoleNames()->first() != 'Admin'){
             $user_data = User::where(['status'=>1, 'department_id'=>1])->pluck('name','id');
-        //  }
-        //  else{
-        //     $user_data = User::where(['status'=>1, 'department_id'=>1, 'id'=>$userID])->pluck('name','id');
-        // }
+         }else{
+            $user_data = User::where(['status'=>1])->pluck('name','id');
+            // dd($user_data);
+        }
+        
         return $dataTable->render('admin.master.sales.index',compact('brand_data','user_data'));
     }
 
@@ -98,7 +95,8 @@ class SalesController extends Controller
 
             }
             $sale->save();
-            return redirect()->route('sales.index');
+            $msg = "The Sale is added successfully";
+            return redirect()->route('sales.index')->with('Success', $msg);
     }
      
     public function edit(Request $request){
@@ -110,6 +108,7 @@ class SalesController extends Controller
     }
      
     public function update(Request $request){
+        // dd($request->all());
         $id =$request->sale;
         $sale = Sale::find($id);
         $inputs = $request->all();
@@ -129,6 +128,25 @@ class SalesController extends Controller
             $inputs['screen_shot'] = $url;
         }
         $sale->update($inputs);
-        return redirect()->route('sales.index');
+        if($request->input('order_status')!= null){
+            DB::table('remarks')->insert([
+                'comment' => $request->input('comment'),
+                'order_status' => $request->input('order_status'),
+                'sale_id' => $request->sale,
+                'user_id' => auth()->id(),
+                'created_at' => now(), 
+            ]);
+        }
+        $msg = "The Sale data is updated successfully";
+        return redirect()->route('sales.index')->with('Success', $msg);
+    }
+
+    public function show(Sale $sale)
+    {
+        // abort_if(Gate::denies('students.show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // dd($sale);
+        $remarks = DB::table('remarks')->where('sale_id', $sale->id)->get();
+        // DD($remarks);
+        return view('admin.master.sales.show', compact('sale','remarks'));
     }
 }

@@ -20,6 +20,12 @@
     
     <div class="row">
         <div class="col-lg-12">
+        @if (Session::has('Success'))
+            <div class="alert alert-success" id="successMessage">{{ Session::get('Success') }}</div>
+        @endif
+        @if (Session::has('fail'))
+            <div class="alert alert-danger" id="errorMessage">{{ Session::get('Fail') }}</div>
+        @endif
             <div class="card border-top border-primary" id="invoiceList">
                 <div class="card-header border border-dashed ">
                     <div class="d-flex align-items-center">
@@ -50,5 +56,16 @@
 @endsection 
 @section('script')
 {!! $dataTable->scripts() !!}
+
 @endsection
+<script>
+    $(document).ready(function(){
+        setTimeout(function() {
+                $("#successMessage").hide('blind', {}, 500)
+            }, 5000);
+            setTimeout(function() {
+                $("#errorMessage").hide('blind', {}, 500)
+            }, 5000);
+        })
+</script>
 

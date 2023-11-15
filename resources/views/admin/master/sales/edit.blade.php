@@ -145,6 +145,19 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label">{{ lang('Comment') }}<span class="text-danger">*</span></label>
+                                            <textarea id="comment" name="comment" class="form-control" rows="2" autocomplete="off" 
+                                                 placeholder="Enter Comment"></textarea>
+                                            @error('comment')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    
                                     <input type="hidden" class="form-control" id="brand_id"
                                                         name="brand_id" value="{{isset($sales) ? $sales->brand_id : $brand_id}}"
                                                         placeholder="Brand Id"
@@ -185,4 +198,5 @@
  
 
 @endsection
+
 

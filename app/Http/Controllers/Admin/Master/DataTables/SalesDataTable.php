@@ -30,6 +30,9 @@ class SalesDataTable extends DataTable
             })
             ->addColumn('action', function ($record) {
                 $action = '';
+                // if (Gate::check('students.show')) {
+                    $action .= '<a href="' . route('sales.show', [$record->id]) . '"  class="btn btn-sm btn-primary view-item-btn me-2 showRecordBtn"><i class="ri-eye-fill align-bottom"></i></a>';
+                // }
                 // if (Gate::check('packages.edit')) {
                     $action .= '<a href="' . route('sales.edit', [$record->id]) . '" class="btn btn-sm btn-success edit-item-btn me-2"><i class="ri-edit-box-line align-bottom"></i></a>';
                 // }
@@ -44,8 +47,10 @@ class SalesDataTable extends DataTable
         $query = $model->with(['user', 'brand', 'state', 'packages']);
         if(auth()->user()->getRoleNames()->first() != 'Admin'){
             $department_id = auth()->user()->department_id;
-            if ($department_id == 2) {
-                $query->where('order_status', 'Sale');
+            if($department_id == 1){
+                $query->where(['user_id'=>auth()->user()->id]);
+            }else if ($department_id == 2) {
+                $query->where(['order_status'=> 'Sale']);
             } else if ($department_id == 3) {
                 $query->where('order_status', 'Quility done');
             } else if ($department_id == 4) {

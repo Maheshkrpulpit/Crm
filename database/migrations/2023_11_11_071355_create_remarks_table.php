@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('remarks', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('user_id');
+            $table->string('order_status');
+            $table->tinyInteger('sale_id');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
