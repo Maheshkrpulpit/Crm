@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Hash;
 
+use App\Models\Master\AsignBrand;
 use App\Models\Master\Department;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -84,6 +85,10 @@ class User extends Authenticatable implements HasMedia
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function assignBrand(){
+        return $this->belongsTo(AsignBrand::class);
     }
 
     

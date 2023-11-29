@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Master\DataTables;
 
+use App\Models\Master\AsignBrand;
 use App\Models\Master\Sale;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Yajra\DataTables\Html\Editor\Fields\Select;
 
 class SalesDataTable extends DataTable
 {   
@@ -45,22 +47,27 @@ class SalesDataTable extends DataTable
     public function query(Sale $model)
     {
         $query = $model->with(['user', 'brand', 'state', 'packages']);
-        if(auth()->user()->getRoleNames()->first() != 'Admin'){
+
+        if (auth()->user()->getRoleNames()->first() != 'Admin') {
             $department_id = auth()->user()->department_id;
-            if($department_id == 1){
-                $query->where(['user_id'=>auth()->user()->id]);
-            }else if ($department_id == 2) {
-                $query->where(['order_status'=> 'Sale']);
+            $asignBrand = AsignBrand::where('user_id', auth()->user()->id)->pluck("brand_id")->toArray();
+
+            if ($department_id == 1) {
+                $query->where(['user_id' => auth()->user()->id]);
+            } else if ($department_id == 2) {
+                $query->where(['order_status' => 'Sale'])->whereIn('brand_id', $asignBrand);
             } else if ($department_id == 3) {
-                $query->where('order_status', 'Quility done');
+                $query->where(['order_status' => 'Quility done'])->whereIn('brand_id', $asignBrand);
             } else if ($department_id == 4) {
-                $query->where('order_status', 'Processed');
+                $query->where(['order_status' => 'Processed'])->whereIn('brand_id', $asignBrand);
             } else if ($department_id == 5) {
-                $query->where('order_status', 'Paid');
+                $query->where(['order_status' => 'Paid'])->whereIn('brand_id', $asignBrand);
             }
         }
+
         return $query->newQuery();
     }
+
 
     public function html()
     {

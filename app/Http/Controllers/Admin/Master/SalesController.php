@@ -34,7 +34,8 @@ class SalesController extends Controller
             ->where('model_id', $userID)
             ->select('role_id')
             ->get();
-        if(($roles['0']->role_id) == 3){
+        $userDepartment = User::where('id', $userID)->value('department_id');
+        if(($roles['0']->role_id) == 3 && $userDepartment == 1){
             $brand_id = $request->brand_id;
             $package = Package::where(['brand_id'=>$brand_id, 'status'=>1])->get();
             return view('admin.master.sales.create', compact('brand_id','package','userID'));
