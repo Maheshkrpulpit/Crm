@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Master\Sale;
+use App\Models\Master\AsignBrand;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Master\Brand;
@@ -29,7 +31,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-       
+        
             return redirect()->route('users.index');
         
     }
@@ -44,8 +46,11 @@ class HomeController extends Controller
         // $appointments=\Modules\Office\Entities\Appointment::orderBy('appointment_date_time','asc')->get();
 
         // endif;
+            $coustomers = Sale::count();
+            $assignBrandAmount = AsignBrand::sum('amount');
+            // dd($assignBrandAmount);
             $brands = Brand::where('status',1)->get();
-        return view('dashboard-projects',compact('brands'));
+        return view('dashboard-projects',compact('brands','coustomers','assignBrandAmount'));
     }
 
     /*Language Translation*/
